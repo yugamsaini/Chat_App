@@ -1,9 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/main.dart';
+import 'package:chatapp/models/chat_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatUserCard extends StatefulWidget {
-  const ChatUserCard({super.key});
+  final ChatUser user;
+
+
+  const ChatUserCard({super.key, required this.user});
 
   @override
   State<ChatUserCard> createState() => _ChatUserCardState();
@@ -23,15 +28,33 @@ class _ChatUserCardState extends State<ChatUserCard> {
       //setting up the user messages bar
       child: InkWell(
         onTap:(){},
-        child: const ListTile(
+        child: ListTile(
           //setting the user icon
-          leading: CircleAvatar(child:Icon(CupertinoIcons.person)),
-          title:Text('Demo User'),
-        subtitle: Text('Last User message',maxLines: 1),
+          //leading: const CircleAvatar(child:Icon(CupertinoIcons.person)),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(mq.height*.3),
+            child: CachedNetworkImage(
+          
+              width:mq.height*.055,
+              height:mq.height*.055,
+          
+                  imageUrl: widget.user.image,
+                 // placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const CircleAvatar(child:Icon(CupertinoIcons.person)),
+               ),
+          ),
+          title:Text(widget.user.name),
+        subtitle: Text(widget.user.about,maxLines: 1),
         //the time of the last message
-        trailing: Text('12:00 PM',
-        style: TextStyle(color:Colors.black54),
-        ),
+        trailing: Container(width: 15,
+         height: 15,
+         decoration: BoxDecoration(color: Colors.greenAccent.shade400, borderRadius: BorderRadius.circular(10)),
+         )
+        
+
+        // trailing: Text('12:00 PM',
+        // style: TextStyle(color:Colors.black54),
+        // ),
 
 
         ),  
