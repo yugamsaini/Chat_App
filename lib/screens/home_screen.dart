@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
+import 'package:chatapp/screens/profile_screen.dart';
 //import 'package:chatapp/widgets/chat_user_card.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
           //search user button
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
           //more button :
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert))
+          IconButton(onPressed: () {
+
+            Navigator.push(context, MaterialPageRoute(builder: (_)=>ProfileScreen(user: list[0])));
+          }, icon: const Icon(Icons.more_vert))
         ],
       ),
 
