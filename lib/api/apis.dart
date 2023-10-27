@@ -55,4 +55,13 @@ class APIs{
     static Stream<QuerySnapshot<Map<String,dynamic>>> getAllUsers(){
       return firestore.collection('users').where('Id', isEqualTo: user.uid).snapshots();
     }
+
+    
+    //for updating the user info
+    static Future<void> updateUserInfo() async {
+      await firestore.collection('users').doc(user.uid).update({
+        'name' : me.name,
+        'about' : me.about,
+        });
+    }
 }
