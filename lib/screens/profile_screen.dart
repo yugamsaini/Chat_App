@@ -1,12 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
+import 'package:chatapp/screens/auth/login_screen.dart';
 //import 'package:chatapp/widgets/chat_user_card.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../helper/dialogs.dart';
 import '../models/chat_user.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -34,8 +36,21 @@ class _HomeScreenState extends State<ProfileScreen> {
             //color of the logout button
             backgroundColor: Colors.redAccent,
               onPressed: () async {
-                await APIs.auth.signOut();
-                await GoogleSignIn().signOut();
+                Dialogs.showProgressBar(context);
+            //sign out fromthe app
+                await APIs.auth.signOut().then((value) async{
+                  await GoogleSignIn().signOut().then((value) {
+
+                    //for hiding the progress dialog
+                    Navigator.pop(context);
+
+                    //for moving to the home screen
+                    Navigator.pop(context);
+                    //after click on logout button move to the login screen
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=>LoginScreen()));
+                  });
+                });
+                
               },
               icon: const Icon(Icons.add_comment_rounded),
               label: const Text('Logout')
@@ -51,18 +66,33 @@ class _HomeScreenState extends State<ProfileScreen> {
                 height: mq.height * .03,
               ),
               //for the user profile picture
-              ClipRRect(
-                borderRadius: BorderRadius.circular(mq.height * .1),
-                child: CachedNetworkImage(
-                  width: mq.height * .2,
-                  height: mq.height * .2,
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(mq.height * .1),
+                    child: CachedNetworkImage(
+                      width: mq.height * .2,
+                      height: mq.height * .2,
 
-                  fit: BoxFit.fill,
-                  imageUrl: widget.user.image,
-                  // placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) =>
-                      const CircleAvatar(child: Icon(CupertinoIcons.person)),
-                ),
+                      fit: BoxFit.fill,
+                      imageUrl: widget.user.image,
+                      // placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const CircleAvatar(child: Icon(CupertinoIcons.person)),
+                    ),
+                  ),
+
+//adding the profile edit button
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: MaterialButton(onPressed: (){},
+                    shape:const CircleBorder(),
+                    color:Colors.white,
+                    child:Icon(Icons.edit,color:Colors.blue),
+                    ),
+                  )
+                ],
               ),
 
               SizedBox(height: mq.height * .03),
