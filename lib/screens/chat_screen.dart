@@ -24,11 +24,17 @@ class _ChatScreenState extends State<ChatScreen> {
           automaticallyImplyLeading: false,
           flexibleSpace: _appBar(),
         ),
+
+        //body
+        body:Column(children: [_chatInput()],
+        
+        )
       ),
     );
   }
 
   Widget _appBar(){
+
     return InkWell(
       onTap: ()=> Navigator.pop(context),
       child: Row(children: [
@@ -78,4 +84,49 @@ class _ChatScreenState extends State<ChatScreen> {
       ],),
     );
   } 
+
+  Widget _chatInput(){
+    return Row(
+      children: [
+        Expanded(
+          child: Card(
+            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+            child: Row(children: [
+          ///emogi button
+               IconButton(
+                  onPressed: (){},
+                  icon: const Icon(
+                    Icons.emoji_emotions,
+                    color:Colors.blueAccent
+                    )),
+          
+            const Expanded(child: TextField(
+          
+              decoration: const InputDecoration(hintText: 'Type Something',
+              hintStyle: TextStyle(color: Colors.blueAccent),
+              border:InputBorder.none),
+            )),
+          //take image from gallery
+                    IconButton(
+                  onPressed: (){},
+                  icon: const Icon(
+                    Icons.image,
+                    color:Colors.blueAccent
+                    )),
+          
+          //take image from camera
+                    IconButton(
+                  onPressed: (){},
+                  icon: const Icon(
+                    Icons.camera_alt_rounded,
+                    color:Colors.blueAccent
+                    )),
+            ],),
+          ),
+        ),
+
+        //send message button
+      ],
+    );
+  }
 }
