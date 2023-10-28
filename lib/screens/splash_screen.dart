@@ -29,7 +29,7 @@ class _HomeScreenState extends State<SplashScreen> {
 //exit full screen
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white)
+        const SystemUiOverlayStyle(systemNavigationBarColor: Colors.white,statusBarColor: Colors.white)
       );
 
 //if the user is already login then it should show the home screen

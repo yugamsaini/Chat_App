@@ -4,10 +4,10 @@ import 'package:chatapp/models/chat_user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/chat_screen.dart';
+
 class ChatUserCard extends StatefulWidget {
-  final ChatUser user;
-
-
+final ChatUser user;
   const ChatUserCard({super.key, required this.user});
 
   @override
@@ -27,7 +27,11 @@ class _ChatUserCardState extends State<ChatUserCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       //setting up the user messages bar
       child: InkWell(
-        onTap:(){},
+        onTap:(){
+          //for navigating to chat screen
+          Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(user : widget.user)));
+
+        },
         child: ListTile(
           //setting the user icon
           //leading: const CircleAvatar(child:Icon(CupertinoIcons.person)),

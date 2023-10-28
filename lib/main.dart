@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'We Chat',
-
+  debugShowCheckedModeBanner: false,
       //this is the custom appbar theme
       //in every page of the app it will remain same
       //so we have define it the main file
