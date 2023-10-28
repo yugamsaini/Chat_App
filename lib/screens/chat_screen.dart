@@ -26,7 +26,51 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
 
         //body
-        body:Column(children: [_chatInput()],
+        body:Column(children: [
+          
+          Expanded(
+            child: StreamBuilder(
+              //from where it will take data
+             // stream: APIs.getAllUsers(),
+              builder: (context, snapshot) {
+                //data is loading or have been loading
+                switch (snapshot.connectionState) {
+                  //if data is loading
+                  case ConnectionState.waiting:
+                  case ConnectionState.none:
+                   // return const Center(child: CircularProgressIndicator());
+            
+                  //if some or all data is loaded then show it
+                  case ConnectionState.active:
+                  case ConnectionState.done:
+                    // final data =
+                    //     snapshot.data?.docs; // question mark agr data null na ho
+                    // _list =
+                    //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+            
+            final _list=[];
+                    if(_list.isNotEmpty){
+                      return ListView.builder(
+                        itemCount : _list.length,
+            
+                        //adding margin frm the top
+                        padding: EdgeInsets.only(top: mq.height * .01),
+            
+                        //bouncing on scrolling
+                        physics: BouncingScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return Text('Message: ${_list[index]}');
+            
+                         // return Text('Name : ${_list[index]}');
+                        });
+                    } else {
+                      return const Center(child: Text('Say hi', style: TextStyle(fontSize: 20)));
+                    }
+                }
+              }, stream: null,
+            ),
+          ),
+          _chatInput()],
         
         )
       ),
