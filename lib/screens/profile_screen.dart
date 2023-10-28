@@ -26,7 +26,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _image
+  String? _image;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -235,12 +235,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         final ImagePicker picker = ImagePicker();
 // Pick an image.
                         final XFile? image =
-                            await picker.pickImage(source: ImageSource.gallery);
+                            await picker.pickImage(source: ImageSource.gallery,imageQuality: 80);
                             if(image != null){
 
                               setState(() {
                                 _image = image.path;
                               });
+
+                              APIs.updateProfilePicture(File(_image!));
                               //for hiding the bottom sheet
                               Navigator.pop(context);
                             }
@@ -258,12 +260,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         final ImagePicker picker = ImagePicker();
 // Pick an image.
                         final XFile? image =
-                            await picker.pickImage(source: ImageSource.camera);
+                            await picker.pickImage(source: ImageSource.camera,imageQuality: 80);
                             if(image != null){
 
                               setState(() {
                                 _image = image.path;
                               });
+
+                              APIs.updateProfilePicture(File(_image!));
                               //for hiding the bottom sheet
                               Navigator.pop(context);
                             }
