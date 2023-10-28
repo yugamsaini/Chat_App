@@ -96,7 +96,9 @@ final _formKey = GlobalKey<FormState>();
                         Positioned(
                           bottom: 0,
                           right: 0,
-                          child: MaterialButton(onPressed: (){},
+                          child: MaterialButton(onPressed: (){
+                            _showBottomSheet();
+                          },
                           shape:const CircleBorder(),
                           color:Colors.white,
                           child:Icon(Icons.edit,color:Colors.blue),
@@ -179,5 +181,55 @@ final _formKey = GlobalKey<FormState>();
             ),
           )),
     );
+  }
+
+  //bottom  sheet for picking the profile picture for user
+  //we will call it in position edit button
+  void _showBottomSheet(){
+    showModalBottomSheet(context: context, 
+    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
+    builder: (_){
+      return ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.only(top:mq.height * .03, bottom:mq.height * .05),
+        children: [
+          //pick profile picture label
+          const Text('Pick Profile Picture',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)),
+
+          //for adding some space
+          SizedBox(height: mq.height * .02),
+        //adding buttons
+          Row(//it creates horizontal row of children
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+            children: [
+              ///pick pic from gallery
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  fixedSize: Size(mq.width * .03,mq.height * .15)
+                ) ,
+                onPressed: (){}, 
+                child: Image.asset(
+            'images/add_image.png')),
+
+  //take picture from camera button
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: const CircleBorder(),
+                  fixedSize: Size(mq.width * .03,mq.height * .15)
+                ) ,
+                onPressed: (){}, 
+                child: Image.asset(
+            'images/camera.png')),
+          ],
+          )
+        ],
+      );
+    });
   }
 }
