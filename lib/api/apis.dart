@@ -94,4 +94,8 @@ class APIs{
         
         });
     }
+    //chat screen related api
+    static Stream<QuerySnapshot<Map<String,dynamic>>> getAllMessages(){
+      return firestore.collection('messages').snapshots();
+    }
 }

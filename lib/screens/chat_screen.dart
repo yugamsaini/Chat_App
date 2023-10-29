@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../api/apis.dart';
 import '../main.dart';
 import '../models/chat_user.dart';
 
@@ -30,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
           
           Expanded(
             child: StreamBuilder(
+              stream: APIs.getAllMessages(),
               //from where it will take data
              // stream: APIs.getAllUsers(),
               builder: (context, snapshot) {
@@ -38,13 +43,14 @@ class _ChatScreenState extends State<ChatScreen> {
                   //if data is loading
                   case ConnectionState.waiting:
                   case ConnectionState.none:
-                   // return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
             
                   //if some or all data is loaded then show it
                   case ConnectionState.active:
                   case ConnectionState.done:
-                    // final data =
-                    //     snapshot.data?.docs; // question mark agr data null na ho
+                    final data =
+                        snapshot.data?.docs; // question mark agr data null na ho
+                        log('Data : ${jsonEncode(data![0].data())}');
                     // _list =
                     //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
             
@@ -67,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       return const Center(child: Text('Say hi', style: TextStyle(fontSize: 20)));
                     }
                 }
-              }, stream: null,
+              }, 
             ),
           ),
           _chatInput()],
