@@ -2,12 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chatapp/models/message.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
 import '../models/chat_user.dart';
+import '../widgets/message_card.dart';
 
 class ChatScreen extends StatefulWidget {
    final ChatUser user;
@@ -18,6 +20,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+//for storing all the messages
+  List<Message> _list=[];
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,6 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
           flexibleSpace: _appBar(),
         ),
 
+backgroundColor: const Color.fromARGB(255, 234, 248, 255),
         //body
         body:Column(children: [
           
@@ -54,7 +60,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     // _list =
                     //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
             
-            final _list=[];
+            //final _list=[];
+            _list.clear();
+            _list.add(Message(told: 'hi', msg: 'sdlf', read: 'read', type: Type.text, fromId: 'xyz', sent: '12am'));
                     if(_list.isNotEmpty){
                       return ListView.builder(
                         itemCount : _list.length,
@@ -65,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         //bouncing on scrolling
                         physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
-                          return Text('Message: ${_list[index]}');
+                          return MessageCard(message: _list[index]);
             
                          // return Text('Name : ${_list[index]}');
                         });
