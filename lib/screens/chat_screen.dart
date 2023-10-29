@@ -23,6 +23,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
 //for storing all the messages
   List<Message> _list=[];
+//for handling text messages changes
+  final _textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -40,7 +42,7 @@ backgroundColor: const Color.fromARGB(255, 234, 248, 255),
           
           Expanded(
             child: StreamBuilder(
-              stream: APIs.getAllMessages(),
+              stream: APIs.getAllMessages(widget.user),
               //from where it will take data
              // stream: APIs.getAllUsers(),
               builder: (context, snapshot) {
@@ -49,20 +51,20 @@ backgroundColor: const Color.fromARGB(255, 234, 248, 255),
                   //if data is loading
                   case ConnectionState.waiting:
                   case ConnectionState.none:
-                    return const Center(child: CircularProgressIndicator());
+                    return const SizedBox();
             
                   //if some or all data is loaded then show it
                   case ConnectionState.active:
                   case ConnectionState.done:
                     final data =
                         snapshot.data?.docs; // question mark agr data null na ho
-                        log('Data : ${jsonEncode(data![0].data())}');
-                    // _list =
-                    //     data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
+                       // log('Data : ${jsonEncode(data![0].data())}');
+                    _list =
+                        data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
             
             //final _list=[];
-            _list.clear();
-            _list.add(Message(told: 'hi', msg: 'sdlf', read: 'read', type: Type.text, fromId: 'xyz', sent: '12am'));
+            //_list.clear();
+            //_list.add(Message(told: 'hi', msg: 'sdlf', read: 'read', type: Type.text, fromId: 'xyz', sent: '12am'));
                     if(_list.isNotEmpty){
                       return ListView.builder(
                         itemCount : _list.length,
@@ -163,7 +165,8 @@ backgroundColor: const Color.fromARGB(255, 234, 248, 255),
                       size: 25,
                       )),
             
-             const Expanded(child: TextField(
+              Expanded(child: TextField(
+              controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: const InputDecoration(hintText: 'Type Something',
@@ -195,7 +198,12 @@ backgroundColor: const Color.fromARGB(255, 234, 248, 255),
           ),
     
           //send message button
-          MaterialButton(onPressed: (){},
+          MaterialButton(onPressed: (){
+            if(_textController.text.isNotEmpty){
+              APIs.sendMessage(widget.user, _textController.text);
+              _textController.text = '';
+            }
+          },
           minWidth: 0,
           padding:EdgeInsets.only(top:10,bottom: 10,right:5,left:10),
           shape: CircleBorder(),
