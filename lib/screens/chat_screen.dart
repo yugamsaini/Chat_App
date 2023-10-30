@@ -7,6 +7,7 @@ import 'package:chatapp/models/message.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
@@ -233,7 +234,15 @@ class _ChatScreenState extends State<ChatScreen> {
 
                   //take image from camera
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+                         final XFile? image =
+                            await picker.pickImage(source: ImageSource.camera,imageQuality: 70);
+                            if(image != null){
+
+                              await APIs.sentChatImage(widget.user,File(image.path));
+                            }
+                      },
                       icon: const Icon(Icons.camera_alt_rounded,
                           color: Colors.blueAccent, size: 26)),
 
@@ -248,7 +257,7 @@ class _ChatScreenState extends State<ChatScreen> {
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
-                APIs.sendMessage(widget.user, _textController.text);
+                APIs.sendMessage(widget.user, _textController.text,Type.text);
                 _textController.text = '';
               }
             },
