@@ -118,4 +118,12 @@ static Future<void> sendMessage(ChatUser chatuser,String msg) async{
     firestore.collection('chats/${getConversationID(chatuser.Id)}/messages/');
     await ref.doc(time).set(message.toJson());
 }
+
+//function to update the read status of message
+static Future<void> updateMessageReadStatus(Message message) async {
+      firestore.collection('chats/${getConversationID(message.fromId)}/messages/')
+      .doc(message.sent)
+      .update({'read':DateTime.now().millisecondsSinceEpoch.toString()});
+
+}
 }

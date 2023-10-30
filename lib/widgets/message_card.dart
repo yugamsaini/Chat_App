@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:chatapp/helper/my_date_util.dart';
 import 'package:flutter/material.dart';
 
 import '../api/apis.dart';
@@ -21,6 +24,12 @@ class _MessageCardState extends State<MessageCard> {
 
   //sender or another user messages
   Widget _blueMessage(){
+
+    //update last read message if sender and receiver are different
+    if(widget.message.read.isEmpty){
+      APIs.updateMessageReadStatus(widget.message);
+      log('message read updated');
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -42,6 +51,7 @@ class _MessageCardState extends State<MessageCard> {
               bottomRight: Radius.circular(30)
               )),
             child:Text(widget.message.msg,
+
             style: const TextStyle(fontSize: 15,color:Colors.black87),
             ),
           ),
@@ -50,7 +60,9 @@ class _MessageCardState extends State<MessageCard> {
         Padding(
           padding: EdgeInsets.only(right:mq.width*.04),
           child: Text(
-            widget.message.sent,
+         MyDateUtil.getFormattedTime(
+          context: context, time: widget.message.sent),
+
             style:const TextStyle(fontSize: 13,color: Colors.black54),
           ),
         ),
@@ -66,34 +78,15 @@ class _MessageCardState extends State<MessageCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        //message content
-        Flexible(
-          child: Container(
-            padding: EdgeInsets.all(mq.width * .04),
-            margin: EdgeInsets.symmetric(
-              horizontal: mq.width*.04,vertical: mq.height *.01
-            ),
-            decoration: BoxDecoration(
-              color:const Color.fromARGB(255, 218, 255, 176),
-            border:Border.all(color:Colors.lightGreen),
-        
-            //making border curve
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight:Radius.circular(30),
-              bottomRight: Radius.circular(30)
-              )),
-            child:Text(widget.message.msg,
-            style: const TextStyle(fontSize: 15,color:Colors.black87),
-            ),
-          ),
-        ),
-//message time
+        //message time
         Row(
           children: [
             //adding some space
             SizedBox(width: mq.width*.04),
+
             //double tic blue icon for message read
+            if(widget.message.read.isNotEmpty)
+
             const Icon(
               Icons.done_all_rounded,
               color:Colors.blue,
@@ -101,15 +94,17 @@ class _MessageCardState extends State<MessageCard> {
             ),
             //for adding some space
             SizedBox(width:2),
-            //read time
+
+            //sent time
             Text(
-              '${widget.message.read}',
+              //widget.message.sent,
+              MyDateUtil.getFormattedTime(context: context, time: widget.message.sent),
               style:const TextStyle(fontSize: 13,color: Colors.black54),
             ),
           ],
         ),
-
-         Flexible(
+        //message content
+        Flexible(
           child: Container(
             padding: EdgeInsets.all(mq.width * .04),
             margin: EdgeInsets.symmetric(
@@ -130,6 +125,29 @@ class _MessageCardState extends State<MessageCard> {
             ),
           ),
         ),
+
+
+        //  Flexible(
+        //   child: Container(
+        //     padding: EdgeInsets.all(mq.width * .04),
+        //     margin: EdgeInsets.symmetric(
+        //       horizontal: mq.width*.04,vertical: mq.height *.01
+        //     ),
+        //     decoration: BoxDecoration(
+        //       color:const Color.fromARGB(255, 218, 255, 176),
+        //     border:Border.all(color:Colors.lightGreen),
+        
+        //     //making border curve
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(30),
+        //       topRight:Radius.circular(30),
+        //       bottomLeft: Radius.circular(30)
+        //       )),
+        //     child:Text(widget.message.msg,
+        //     style: const TextStyle(fontSize: 15,color:Colors.black87),
+        //     ),
+        //   ),
+        // ),
 
         //adding some space
        // SizedBox(width: mq.width*.04)
