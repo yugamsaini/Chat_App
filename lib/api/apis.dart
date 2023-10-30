@@ -126,4 +126,14 @@ static Future<void> updateMessageReadStatus(Message message) async {
       .update({'read':DateTime.now().millisecondsSinceEpoch.toString()});
 
 }
+
+//function to get only last message of a specific chat
+static Stream<QuerySnapshot> getLastMessage(
+  ChatUser user){
+    return  firestore
+    .collection('chats/${getConversationID(user.Id)}/messages/')
+    .orderBy('sent',descending: true)
+    .limit(1)
+    .snapshots();
+  }
 }
