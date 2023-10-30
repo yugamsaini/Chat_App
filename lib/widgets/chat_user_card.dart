@@ -35,7 +35,8 @@ class _ChatUserCardState extends State<ChatUserCard> {
       child: InkWell(
         onTap:(){
           //for navigating to chat screen
-          Navigator.push(context,MaterialPageRoute(builder: (_)=>ChatScreen(user : widget.user)));
+          Navigator.push(
+            context,MaterialPageRoute(builder: (_)=>ChatScreen(user : widget.user)));
 
         },
         child: StreamBuilder(
@@ -44,9 +45,9 @@ class _ChatUserCardState extends State<ChatUserCard> {
             
             final data =
                         snapshot.data?.docs; 
-                    final _list =
-                        data
-                        ?.map((e) => Message.fromJson(e.data())).toList() ?? [];
+            
+                     final list = 
+                     data?.map((e) => Message.fromJson(e.data() as Map<String, dynamic>)).toList() ?? [];
                    
                    if(list.isNotEmpty) _message = list[0];
           return ListTile(
@@ -55,7 +56,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(mq.height*.3),
             child: CachedNetworkImage(
-          
+            
               width:mq.height*.055,
               height:mq.height*.055,
           
