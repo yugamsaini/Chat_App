@@ -29,7 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
   final _textController = TextEditingController();
 
 //for storing value of showing or hiding emojis
-  bool _showEmoji = false;
+//isuploading for checking if the image is uploading or not
+  bool _showEmoji = false, _isUploading = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -88,6 +89,8 @@ class _ChatScreenState extends State<ChatScreen> {
                             //_list.add(Message(told: 'hi', msg: 'sdlf', read: 'read', type: Type.text, fromId: 'xyz', sent: '12am'));
                             if (_list.isNotEmpty) {
                               return ListView.builder(
+                                //to shoe the last message first
+                                reverse: true,
                                   itemCount: _list.length,
             
                                   //adding margin frm the top
@@ -109,6 +112,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                     ),
                   ),
+                  //if image is uploading then show the progress indicator
+                  if(_isUploading)
+             const Align(
+                alignment: Alignment.centerRight,
+                child: 
+              Padding(
+                padding:
+                EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                child: CircularProgressIndicator(strokeWidth: 2))),
+                  //chat input field
                   _chatInput(),
                   //import 'package:flutter/foundation.dart' as foundation;
             
@@ -228,7 +241,19 @@ class _ChatScreenState extends State<ChatScreen> {
                   )),
                   //take image from gallery
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        final ImagePicker picker = ImagePicker();
+
+                        //picking multiple images
+                         final List<XFile> ? images =
+                            await picker.pickMultiImage(imageQuality: 70);
+                      //uploading and sending image one by one
+                          for(var i in images!){
+                            setState(()=> _isUploading = true);
+                            await APIs.sentChatImage(widget.user, File(i.path));
+                            setState(()=> _isUploading = false);
+                          }
+                      },
                       icon: const Icon(Icons.image,
                           color: Colors.blueAccent, size: 26)),
 
@@ -239,8 +264,10 @@ class _ChatScreenState extends State<ChatScreen> {
                          final XFile? image =
                             await picker.pickImage(source: ImageSource.camera,imageQuality: 70);
                             if(image != null){
-
-                              await APIs.sentChatImage(widget.user,File(image.path));
+                              setState(()=> _isUploading = true);
+                              await APIs.sentChatImage(
+                                widget.user,File(image.path));
+                                setState(()=> _isUploading = false);
                             }
                       },
                       icon: const Icon(Icons.camera_alt_rounded,

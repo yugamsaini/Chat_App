@@ -64,7 +64,10 @@ class _MessageCardState extends State<MessageCard> {
        
               imageUrl: widget.message.msg,
               placeholder: (context,url)=>
-             const CircularProgressIndicator(strokeWidth: 2),
+            const Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: const CircularProgressIndicator(strokeWidth: 2),
+             ),
               
               // placeholder: (context, url) => CircularProgressIndicator(),
               errorWidget: (context, url, error) =>
@@ -150,7 +153,10 @@ class _MessageCardState extends State<MessageCard> {
        
               imageUrl: widget.message.msg,
               placeholder: (context,url)=>
-             const CircularProgressIndicator(strokeWidth: 2),
+            const Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: const CircularProgressIndicator(strokeWidth: 2),
+             ),
               
               // placeholder: (context, url) => CircularProgressIndicator(),
               errorWidget: (context, url, error) =>

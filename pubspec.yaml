@@ -49,6 +49,14 @@ dependencies:
 
   #to show the network images
   cached_network_image: ^3.3.0
+#for picking images
+  image_picker: ^1.0.4
+
+  #for accessing the firebase storage
+  firebase_storage: ^11.4.0
+
+  #for picking the emoji 
+  emoji_picker_flutter: ^1.6.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
