@@ -96,6 +96,28 @@ class APIs{
         
         });
     }
+
+    //for getting specific user info
+    static Stream<QuerySnapshot<Map<String,dynamic>>> getUserInfo(
+      ChatUser chatUser) {
+        return firestore
+        .collection('users')
+        .where('id',isEqualTo: chatUser.Id)
+        .snapshots();
+      }
+
+      //function to update online or last active status of chat user
+      static Future<void> updateActiveStatus(bool isOnline) async{
+        firestore
+        .collection('users')
+        .doc(user.uid).update({
+          'is_online' : isOnline,
+          'last_active' : DateTime.now().millisecondsSinceEpoch.toString()
+        });
+        
+        
+      }
+    
         //chats (collection)--> conversation(doc)--> messages(collection)-->message(doc)
 
     //for getting conversation id

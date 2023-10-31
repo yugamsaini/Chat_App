@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
 import 'package:chatapp/screens/profile_screen.dart';
@@ -6,6 +8,7 @@ import 'package:chatapp/screens/profile_screen.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/chat_user.dart';
@@ -31,6 +34,20 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     APIs.getSelfInfo();
+
+//for getting user status to active
+     APIs.updateActiveStatus(true);
+
+     //for updating user active status according to lifecyle events
+     //resume means that active or online
+     //pause means that inactive or offline
+    SystemChannels.lifecycle.setMessageHandler((message){
+     // log('Message : $message');
+     if(message.toString().contains('resume')) APIs.updateActiveStatus(true);
+     if(message.toString().contains('pause')) APIs.updateActiveStatus(false);
+   //  if(message.toString().contains('pause')) APIs.updateActiveStatus(false);
+        return Future.value(message);
+    });
   }
   @override
   Widget build(BuildContext context) {
