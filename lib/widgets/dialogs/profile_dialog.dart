@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+// ignore: unused_import
 import 'package:chatapp/screens/chat_screen.dart';
 import 'package:chatapp/screens/view_profile_screen.dart';
 import 'package:flutter/cupertino.dart';

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/helper/my_date_util.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../api/apis.dart';
 import '../main.dart';
@@ -20,7 +21,16 @@ class MessageCard extends StatefulWidget {
 class _MessageCardState extends State<MessageCard> {
   @override
   Widget build(BuildContext context) {
-    return APIs.user.uid == widget.message.fromId ? _greenMessage() : _blueMessage();
+
+    ///variable for the curr user if the user himself sending the message then showt he 
+    ///green tick else show the  blue tick
+    bool isMe = APIs.user.uid == widget.message.fromId;
+    return InkWell(
+      onLongPress: () {
+        return _showBottomSheet(isMe);
+      },
+      child : isMe ? _greenMessage()
+    : _blueMessage());
   }
 
   //sender or another user messages
@@ -192,6 +202,102 @@ class _MessageCardState extends State<MessageCard> {
         //adding some space
        // SizedBox(width: mq.width*.04)
       ],
+    );
+  }
+
+//bottom sheet for modifying user messages and the show the status of the read message
+  void _showBottomSheet(bool isMe) {
+    showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        builder: (_) {
+          return ListView(
+            shrinkWrap: true,
+            
+            children: [
+              Container(
+                height: 4,
+                margin : EdgeInsets.symmetric(
+                  vertical: mq.height * 0.015, horizontal: mq.width * .4
+                ),
+                decoration: BoxDecoration(color: Colors.grey,
+                borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+
+              //if the tapped item is text then show the edit option other wise
+              //show the save option
+              widget.message.type == Type.text
+              ?
+              //copy text
+             _OptionItem(icon: const Icon(Icons.copy_all_rounded,color: Colors.blue,size:26), name: 'Copy Text: ', onTap: (){})
+             :
+             //save item
+               _OptionItem(icon: const Icon(Icons.download_rounded,color: Colors.blue,size:26), name: 'Save Image: ', onTap: (){}),
+
+             //separator between the option item
+             if(isMe)
+             Divider(
+              color : Colors.black54,
+              endIndent: mq.width * 0.04,
+              indent: mq.width * .04,
+
+             ),
+             //if the tapped item is text thenshow only the edit button
+             if(widget.message.type == Type.text && isMe)
+             //edit option
+             _OptionItem(icon: Icon(Icons.edit,color: Colors.blue,size:26), name: 'Edit Message: ', onTap: (){}),
+             //Delete option
+             if(isMe)
+             _OptionItem(icon: Icon(Icons.delete_forever,color: Colors.red,size:26), name: 'Delete Message: ', onTap: (){}),
+              
+              Divider(
+              color : Colors.black54,
+              endIndent: mq.width * 0.04,
+              indent: mq.width * .04,
+
+             ),
+
+             //Sent At
+             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.blue), name: 'Sent At: ', onTap: (){}),
+             //message read time
+             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.green), name: 'Read At: ', onTap: (){})
+
+
+
+            ],
+          );
+        });
+  }
+}
+
+class _OptionItem extends StatelessWidget {
+  //for the bottom sheet diaog 
+  //we will show the icon and the edit message button
+  final Icon icon;
+  final String name;
+
+  //this also will be given by the user
+  final VoidCallback onTap;
+
+  const _OptionItem({required this.icon, required this.name, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onTap(),
+        
+       child : Padding(
+         padding: EdgeInsets.only(
+          left: mq.width * .05,
+          top: mq.height * .015,
+          bottom : mq.height * .015,
+         ),
+         child: Row(children: [icon, Flexible(
+          child: Text('    $name',style : TextStyle(fontSize: 15,color : Colors.black54,letterSpacing: 0.5)))]),
+       )
     );
   }
 }

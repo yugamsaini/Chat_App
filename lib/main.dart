@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_notification_channel/flutter_notification_channel.dart';
+import 'package:flutter_notification_channel/notification_importance.dart';
 import 'firebase_options.dart';
 
 //global object for accessing device screen size
