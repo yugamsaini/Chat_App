@@ -1,6 +1,5 @@
 
-import 'dart:math';
-
+import 'dart:developer';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
 import 'package:chatapp/screens/profile_screen.dart';
@@ -36,16 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
     APIs.getSelfInfo();
 
 //for getting user status to active
-     APIs.updateActiveStatus(true);
+    // APIs.updateActiveStatus(true);
 
      //for updating user active status according to lifecyle events
      //resume means that active or online
      //pause means that inactive or offline
     SystemChannels.lifecycle.setMessageHandler((message){
      // log('Message : $message');
-     if(message.toString().contains('resume')) APIs.updateActiveStatus(true);
-     if(message.toString().contains('pause')) APIs.updateActiveStatus(false);
+
+     if (APIs.auth.currentUser != null) {
+     if(message.toString().contains('resume')) {
+      
+      APIs.updateActiveStatus(true);
+     }
+     if(message.toString().contains('pause')) {
+      
+      APIs.updateActiveStatus(false);
+     }
    //  if(message.toString().contains('pause')) APIs.updateActiveStatus(false);
+     }
         return Future.value(message);
     });
   }
@@ -85,12 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   for(var i in _list){
                     if(i.name.toLowerCase().contains(val.toLowerCase()) || i.email.toLowerCase().contains(val.toLowerCase())){
                       _searchList.add(i);
-                    }
+                    
                     setState(() {
                       _searchList;
                     });
                   }
-          
+                  }
                 },
               
             ) : const Text('We Chat'),
@@ -103,7 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
               }, icon: Icon(_isSearching 
               ? CupertinoIcons.clear_circled_solid
               : Icons.search)),
-              //more button :
+
+
+              //more feature button :
               IconButton(onPressed: () {
           
                 Navigator.push(context, MaterialPageRoute(builder: (_)=>ProfileScreen(user: APIs.me)));
@@ -111,13 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           
-          //bottom right corner flaoting button
+          //bottom right corner flaoting button to add the new user
           floatingActionButton: Padding(
             padding: EdgeInsets.only(bottom: 10),
             child: FloatingActionButton(
                 onPressed: () async {
-                  await APIs.auth.signOut();
-                  await GoogleSignIn().signOut();
+                  // await APIs.auth.signOut();
+                  // await GoogleSignIn().signOut();
+                 // _addChatUserDialog();
                 },
                 child: const Icon(Icons.add_comment_rounded)),
           ),

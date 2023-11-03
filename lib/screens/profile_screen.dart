@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
 import 'package:chatapp/screens/auth/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:chatapp/widgets/chat_user_card.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +49,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundColor: Colors.redAccent,
                 onPressed: () async {
                   Dialogs.showProgressBar(context);
+
+//updating the profile status
+                await APIs.updateActiveStatus(false);
+
                   //sign out fromthe app
                   await APIs.auth.signOut().then((value) async {
                     await GoogleSignIn().signOut().then((value) {
@@ -56,6 +61,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       //for moving to the home screen
                       Navigator.pop(context);
+
+                      APIs.auth = FirebaseAuth.instance;
+
                       //after click on logout button move to the login screen
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (_) => LoginScreen()));
@@ -127,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     SizedBox(height: mq.height * .03),
 
-                    //showing the user email below the profilepicture
+                    //showing the user email below the profile picture
                     Text(widget.user.email,
                         style: const TextStyle(
                             color: Colors.black54, fontSize: 16)),
