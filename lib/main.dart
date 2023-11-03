@@ -17,7 +17,7 @@ void main() {
   //to show the screen in the full screen mode
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-//for the app to work only in portrait mode
+//for th e app to work only in portrait mode
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]).then((value){
     _initializeFirebase();
   runApp(const MyApp());

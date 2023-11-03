@@ -3,6 +3,7 @@ import 'package:chatapp/helper/my_date_util.dart';
 import 'package:chatapp/main.dart';
 import 'package:chatapp/models/chat_user.dart';
 import 'package:chatapp/models/message.dart';
+import 'package:chatapp/widgets/dialogs/profile_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -51,19 +52,24 @@ class _ChatUserCardState extends State<ChatUserCard> {
                    
                    if(list.isNotEmpty) _message = list[0];
           return ListTile(
-          //setting the user icon
+          //setting the user profile picture 
           
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(mq.height*.3),
-            child: CachedNetworkImage(
+          leading: InkWell(
+            onTap: () {
+              showDialog(context: context, builder: (_)=> ProfileDialog(user : widget.user));
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(mq.height*.3),
+              child: CachedNetworkImage(
+              
+                width:mq.height*.055,
+                height:mq.height*.055,
             
-              width:mq.height*.055,
-              height:mq.height*.055,
-          
-                  imageUrl: widget.user.image,
-                 // placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const CircleAvatar(child:Icon(CupertinoIcons.person)),
-               ),
+                    imageUrl: widget.user.image,
+                   // placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const CircleAvatar(child:Icon(CupertinoIcons.person)),
+                 ),
+            ),
           ),
           //user name
           title:Text(widget.user.name),
