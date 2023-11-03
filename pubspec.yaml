@@ -57,6 +57,13 @@ dependencies:
 
   #for picking the emoji 
   emoji_picker_flutter: ^1.6.3
+
+  #for accessing firebase messaging(push notification)
+  firebase_messaging: ^14.7.3
+
+  #for calling REST APIs
+  http: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

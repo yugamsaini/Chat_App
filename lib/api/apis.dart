@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart';
 
 import '../models/message.dart';
 
@@ -42,6 +44,33 @@ class APIs{
           //log('push token : $t');
         }
       });
+    }
+
+    //for sending the push notification
+    static Future<void> sendPushNotification(ChatUser chatUser,String msg) async{
+      
+      try{
+        final body = {
+        "to" : chatUser.pushToken,
+        "notification" : {
+          "title" : chatUser.name,
+          "body" : msg
+        }
+
+      };
+var res = await post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+headers: {
+  HttpHeaders.contentTypeHeader : 'application/json',
+  HttpHeaders.authorizationHeader :
+  'key=AAAA9WgMQGo:APA91bGKQ5ZzH3TtX6kTfXRMrBlYjE3zblBgUU98xF_AwamC6oyMMGNctWxU0kNfzC4JQSRssRqJ2t3pTw4YFVwwEm2Dadx9wxc2aUOu5OBwRRipgxZHfp2hxY4a5V0KcdJlXaz2WJ7k'
+},
+ body: jsonEncode(body));
+log('Response status: ${res.statusCode}');
+log('Response body: ${res.body}');
+      }
+      catch(e){
+log('\nsendPushNotificationE: $e');
+      }
     }
     //for checking if user exist or not
     static Future<bool> userExists() async {
@@ -167,7 +196,9 @@ static Future<void> sendMessage(ChatUser chatuser,String msg,Type type) async{
       sent: time);
     final ref = 
     firestore.collection('chats/${getConversationID(chatuser.Id)}/messages/');
-    await ref.doc(time).set(message.toJson());
+    //as soon as the data is set to firebase
+    await ref.doc(time).set(message.toJson()).then((value)=>
+    sendPushNotification(chatuser, type == Type.text ? msg : 'image'));
 }
 
 //function to update the read status of message
