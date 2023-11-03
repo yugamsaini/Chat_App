@@ -1,5 +1,7 @@
 //import 'package:chatapp/screens/auth/login_screen.dart';
 //import 'package:chatapp/screens/home_screen.dart';
+import 'dart:developer';
+
 import 'package:chatapp/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -59,4 +61,13 @@ class MyApp extends StatelessWidget {
 _initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform);
+
+    var result = await FlutterNotificationChannel.registerNotificationChannel(
+    description: 'For Showing Message Notification',
+    id: 'chats',
+    importance: NotificationImportance.IMPORTANCE_HIGH,
+    name: 'Chats',
+    
+);
+log('\nNotification Channel Result : $result');
 }
