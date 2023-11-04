@@ -1,5 +1,4 @@
 import 'dart:developer';
-//import 'dart:js_interop';
 
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/screens/auth/login_screen.dart';

@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/helper/my_date_util.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart';
 
 import '../api/apis.dart';
+import '../helper/dialogs.dart';
 import '../main.dart';
 import '../models/message.dart';
 
@@ -232,7 +233,17 @@ class _MessageCardState extends State<MessageCard> {
               widget.message.type == Type.text
               ?
               //copy text
-             _OptionItem(icon: const Icon(Icons.copy_all_rounded,color: Colors.blue,size:26), name: 'Copy Text: ', onTap: (){})
+             _OptionItem(icon: const Icon(Icons.copy_all_rounded,color: Colors.blue,size:26),
+              name: 'Copy Text: ',
+               onTap: () async {
+                await Clipboard.setData(ClipboardData(text: widget.message.msg)).then((value){
+                  //for hiding the bottom sheet
+                  Navigator.pop(context);
+
+                  Dialogs.showSnackbar(context,'Text Copied!');
+
+                });
+               })
              :
              //save item
                _OptionItem(icon: const Icon(Icons.download_rounded,color: Colors.blue,size:26), name: 'Save Image: ', onTap: (){}),
@@ -251,7 +262,14 @@ class _MessageCardState extends State<MessageCard> {
              _OptionItem(icon: Icon(Icons.edit,color: Colors.blue,size:26), name: 'Edit Message: ', onTap: (){}),
              //Delete option
              if(isMe)
-             _OptionItem(icon: Icon(Icons.delete_forever,color: Colors.red,size:26), name: 'Delete Message: ', onTap: (){}),
+             _OptionItem(icon: Icon(Icons.delete_forever,color: Colors.red,size:26), 
+             name: 'Delete Message: ',
+              onTap: () async {
+                await APIs.DeleteMessage(widget.message).then((value) {
+                  //for hiding the bottom sheet
+                  Navigator.pop(context);
+                });
+              }),
               
               Divider(
               color : Colors.black54,
@@ -261,9 +279,17 @@ class _MessageCardState extends State<MessageCard> {
              ),
 
              //Sent At
-             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.blue), name: 'Sent At: ', onTap: (){}),
+             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.blue),
+              name: 'Sent At: ${MyDateUtil.getFormattedTime(context: context, time: widget.message.sent)}', 
+              onTap: (){}),
              //message read time
-             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.green), name: 'Read At: ', onTap: (){})
+
+             _OptionItem(icon: Icon(Icons.remove_red_eye,color: Colors.green),
+              name: widget.message.read.isEmpty ?
+              'Read At : Not Seen Yet'
+              :
+              'Read At: ${MyDateUtil.getFormattedTime(context: context, time: widget.message.sent)}', 
+              onTap: (){})
 
 
 
