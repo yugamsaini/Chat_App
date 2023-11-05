@@ -91,6 +91,28 @@ log('\nsendPushNotificationE: $e');
       return (await firestore.collection('users').doc(user.uid).get()).exists;
     }
 
+    //for adding the chat user in our conversation
+   
+    static Future<bool> addChatUser(String email) async {
+      final data = await firestore.collection('users').where('email', isEqualTo: email).get();
+
+      log('data: ${data.docs}');
+      if(data.docs.isNotEmpty && data.docs.first.id != user.uid){
+        //user exists
+
+log('user exists : ${data.docs.first.data()}');
+        firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('my_users')
+        .doc(data.docs.first.id)
+        .set({});
+          return true;
+      } else {
+        return false;
+      }
+    }
+
      //forgetting current user info
     static Future<void> getSelfInfo() async {
       await firestore.collection('users').doc(user.uid).get().then((user) async{
