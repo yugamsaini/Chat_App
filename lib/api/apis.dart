@@ -164,7 +164,11 @@ log('user exists : ${data.docs.first.data()}');
       .snapshots();
     }
 
-    
+     //for adding an user to my user collection when first message is sent
+    static Future<void> usendFirstMessage(ChatUser chatUser,String msg, Type type) async {
+      await firestore.collection('users').doc(chatUser.Id).collection('my_users').doc(user.uid)
+      .set({}).then((value)=> sendMessage(chatUser, msg, type));
+    }
     //for updating the user info
     static Future<void> updateUserInfo() async {
       await firestore.collection('users').doc(user.uid).update({

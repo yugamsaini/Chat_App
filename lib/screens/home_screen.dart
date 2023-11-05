@@ -136,23 +136,35 @@ class _HomeScreenState extends State<HomeScreen> {
           //stream builder dynamically add the data
           body: StreamBuilder(
              stream : APIs.getMyUsersId(),
+             //get id of only known user
             builder : (context,snapshot){
              
              
-            if(snapshot.hasData){
-              StreamBuilder(
+           switch (snapshot.connectionState) {
+                //if data is loading
+                case ConnectionState.waiting:
+                case ConnectionState.none:
+                 // return const Center(child: CircularProgressIndicator());
+          
+                //if some or all data is loaded then show it
+                case ConnectionState.active:
+                case ConnectionState.done:
+
+              return StreamBuilder(
             //from where it will take data
             stream: APIs.getAllUsers(
                       snapshot.data?.docs.map((e)=> e.id).toList()??[]
                       
             ),
+
+            //get only those user whose ids are provided
             builder: (context, snapshot) {
               //data is loading or have been loading
               switch (snapshot.connectionState) {
                 //if data is loading
                 case ConnectionState.waiting:
                 case ConnectionState.none:
-                  return const Center(child: CircularProgressIndicator());
+                 // return const Center(child: CircularProgressIndicator());
           
                 //if some or all data is loaded then show it
                 case ConnectionState.active:
@@ -184,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
             }
-            return Center(child: CircularProgressIndicator(strokeWidth: 2));
+           
           },),
         ),
       ),
