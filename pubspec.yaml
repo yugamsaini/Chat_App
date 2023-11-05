@@ -64,6 +64,12 @@ dependencies:
   #for calling REST APIs
   http: ^1.1.0
 
+  #for creating notification channel
+  flutter_notification_channel: ^2.0.0
+
+  #for storing images into gallery
+  saver_gallery: ^2.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

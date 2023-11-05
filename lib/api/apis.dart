@@ -263,4 +263,15 @@ static Stream<QuerySnapshot> getLastMessage(
       if(message.type == Type.image)
       await storage.refFromURL(message.msg).delete();
   }
+
+  //method to update the message
+   //method to delete the message
+  static Future<void> updateMessage(Message message,String updatedMsg) async {
+
+   await firestore.collection('chats/${getConversationID(message.told)}/messages/')
+      .doc(message.sent)
+      .update({'msg' : updatedMsg});
+
+      
+  }
 }

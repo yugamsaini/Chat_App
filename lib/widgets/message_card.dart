@@ -259,7 +259,15 @@ class _MessageCardState extends State<MessageCard> {
              //if the tapped item is text thenshow only the edit button
              if(widget.message.type == Type.text && isMe)
              //edit option
-             _OptionItem(icon: Icon(Icons.edit,color: Colors.blue,size:26), name: 'Edit Message: ', onTap: (){}),
+             _OptionItem(icon: Icon(Icons.edit,color: Colors.blue,size:26),
+              name: 'Edit Message: ', 
+              onTap: (){
+                //for hiding the bottom sheet
+                Navigator.pop(context);
+
+                _showMessageUpdateDialog();
+              }
+              ),
              //Delete option
              if(isMe)
              _OptionItem(icon: Icon(Icons.delete_forever,color: Colors.red,size:26), 
@@ -296,6 +304,47 @@ class _MessageCardState extends State<MessageCard> {
             ],
           );
         });
+  }
+
+  //dialog for updating the message content
+  void _showMessageUpdateDialog() {
+    String updatedMsg = widget.message.msg;
+
+    showDialog(context: context, builder: (_)=>AlertDialog(
+      contentPadding: EdgeInsets.only(left: 24,right: 24,top: 20,bottom: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      //title
+      title:Row(children: const [Icon(Icons.message,color:Colors.blue,size:28),
+      Text(' Update Message')
+      ],
+      ),
+      //content
+      content: TextFormField(initialValue: updatedMsg,
+      maxLines: null,
+      onChanged: (value) => updatedMsg=value,
+      decoration: InputDecoration(border : OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+      ),
+
+      //actions
+      actions: [
+        //cancel button
+        MaterialButton(onPressed: (){
+          //hide alert dialog
+          Navigator.pop(context);
+        },child:Text('Cancel',
+        style: TextStyle(color:Colors.blue,fontSize: 16),
+        )),
+
+//update button
+        MaterialButton(onPressed: (){
+          //hide alert dialog
+          Navigator.pop(context);
+          APIs.updateMessage(widget.message, updatedMsg);
+        },child:Text('Update',
+        style: TextStyle(color:Colors.blue,fontSize: 16),
+        ))
+      ],
+    ));
   }
 }
 

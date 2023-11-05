@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () async {
                   Dialogs.showProgressBar(context);
 
-//updating the profile status
+               //updating the profile status
                 await APIs.updateActiveStatus(false);
 
                   //sign out fromthe app
