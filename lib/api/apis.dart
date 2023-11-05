@@ -146,9 +146,22 @@ log('user exists : ${data.docs.first.data()}');
       return await firestore.collection('users').doc(user.uid).set(chatUser.toJson());
     }
 
+
+//method for getting id of the known user from the database
+    static Stream<QuerySnapshot<Map<String,dynamic>>> getMyUsersId(){
+      return firestore
+      .collection('users')
+      .doc(user.uid)
+      .collection('my_users')
+      .snapshots();
+    }
 //method for getting all the user from the database
-    static Stream<QuerySnapshot<Map<String,dynamic>>> getAllUsers(){
-      return firestore.collection('users').where('Id', isEqualTo: user.uid).snapshots();
+    static Stream<QuerySnapshot<Map<String,dynamic>>> getAllUsers(List<String> userIds){
+      return firestore
+      .collection('users')
+      .where('id',whereIn: userIds)
+      //.where('Id', isNotEqualTo: user.uid)
+      .snapshots();
     }
 
     

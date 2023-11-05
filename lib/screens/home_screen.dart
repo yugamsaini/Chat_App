@@ -135,8 +135,17 @@ class _HomeScreenState extends State<HomeScreen> {
           
           //stream builder dynamically add the data
           body: StreamBuilder(
+             stream : APIs.getMyUsersId(),
+            builder : (context,snapshot){
+             
+             
+            if(snapshot.hasData){
+              StreamBuilder(
             //from where it will take data
-            stream: APIs.getAllUsers(),
+            stream: APIs.getAllUsers(
+                      snapshot.data?.docs.map((e)=> e.id).toList()??[]
+                      
+            ),
             builder: (context, snapshot) {
               //data is loading or have been loading
               switch (snapshot.connectionState) {
@@ -173,7 +182,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
               }
             },
-          ),
+          );
+            }
+            return Center(child: CircularProgressIndicator(strokeWidth: 2));
+          },),
         ),
       ),
     );
