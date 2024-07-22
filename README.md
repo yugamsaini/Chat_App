@@ -1,6 +1,6 @@
 # chatapp
 
-A new Flutter project.
+Android Chatting Application
 
 ## Getting Started
 
