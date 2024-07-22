@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chatapp/api/apis.dart';
 import 'package:chatapp/main.dart';
@@ -62,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       //for moving to the home screen
                       Navigator.pop(context);
 
-                      APIs.auth = FirebaseAuth.instance;
+                      // APIs.auth = FirebaseAuth.instance;
 
                       //after click on logout button move to the login screen
                       Navigator.pushReplacement(context,

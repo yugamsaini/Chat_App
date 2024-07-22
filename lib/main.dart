@@ -1,75 +1,74 @@
-//import 'package:chatapp/screens/auth/login_screen.dart';
-//import 'package:chatapp/screens/home_screen.dart';
 import 'dart:developer';
 
-import 'package:chatapp/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_notification_channel/flutter_notification_channel.dart';
 import 'package:flutter_notification_channel/notification_importance.dart';
-import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-//global object for accessing device screen size
-//mq as media query
+import 'firebase_options.dart';
+import 'screens/splash_screen.dart';
+
+// Global object for accessing device screen size
+// mq as media query
 late Size mq;
-void main() {
-   
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  //to show the screen in the full screen mode
+  // To show the screen in full-screen 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-//for th e app to work only in portrait mode
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]).then((value){
-    _initializeFirebase();
-  runApp(const MyApp());
+  // For the app to work only in portrait mode
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) async {
+    await _initializeFirebase(); // Wait for Firebase initialization
+    runApp(const MyApp());
   });
-  
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'We Chat',
-  debugShowCheckedModeBanner: false,
-      //this is the custom appbar theme
-      //in every page of the app it will remain same
-      //so we have define it the main file
+      debugShowCheckedModeBanner: false,
+      // This is the custom appbar theme
+      // In every page of the app, it will remain the same
+      // So, we have defined it in the main file
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-
           centerTitle: true,
-        elevation: 1,
-        iconTheme: IconThemeData(color:Colors.black),
-         titleTextStyle: TextStyle(color:Colors.black, 
-         fontWeight:FontWeight.normal,
-      fontSize: 19
-      ),backgroundColor: Colors.white 
-
-        )
+          elevation: 1,
+          iconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+            fontSize: 19,
+          ),
+          backgroundColor: Colors.white,
+        ),
       ),
-      home:const SplashScreen(),
-      //home: const MyHomePage(title: 'Flutter Demo Home '),
+      home: const SplashScreen(),
     );
   }
 }
 
-_initializeFirebase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform);
-
+Future<void> _initializeFirebase() async {
+  try {
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
     var result = await FlutterNotificationChannel.registerNotificationChannel(
-    description: 'For Showing Message Notification',
-    id: 'chats',
-    importance: NotificationImportance.IMPORTANCE_HIGH,
-    name: 'Chats',
-    
-);
-log('\nNotification Channel Result : $result');
+      description: 'For Showing Message Notification',
+      id: 'chats',
+      importance: NotificationImportance.IMPORTANCE_HIGH,
+      name: 'Chats',
+    );
+    log('\nNotification Channel Result : $result');
+  } catch (e) {
+    log('Error initializing Firebase: $e');
+  }
 }

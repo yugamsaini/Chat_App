@@ -68,7 +68,7 @@ dependencies:
   flutter_notification_channel: ^2.0.0
 
   #for storing images into gallery
-  saver_gallery: ^2.0.1
+  #saver_gallery: ^2.0.1
 
 dev_dependencies:
   flutter_test:

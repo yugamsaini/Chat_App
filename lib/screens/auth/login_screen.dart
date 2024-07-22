@@ -15,10 +15,10 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _HomeScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _HomeScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   bool _isAnimated = false;
 
   @override
@@ -33,16 +33,18 @@ class _HomeScreenState extends State<LoginScreen> {
   }
 
   _handleGoogleBtnClick() {
+    //to show the progress indicator
     Dialogs.showProgressBar(context);
     _signInWithGoogle().then((user) async {
-      //for hiding progrss bar
+      //for hiding progress bar after successfull login
       Navigator.pop(context);
       if (user != null) {
         log('\nUser: ${user.user}');
         log('\nUserAdditionalInfo: ${user.additionalUserInfo}');
 
 //agr user exist then move to home screen
-        if((await APIs.userExists())){
+        if((await APIs.userExists()) && mounted){
+          //push replacement so that user again login screen pr naaye
           Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const HomeScreen()));
             //if user doesnot exist then create the new user then move to the home screen
@@ -79,6 +81,7 @@ class _HomeScreenState extends State<LoginScreen> {
       return await APIs.auth.signInWithCredential(credential);
     } catch (e) {
       log('\n_signInWithGoogle: $e');
+      
       Dialogs.showSnackbar(context, 'Something went wrong(Check Internet!)');
       return null;
     }

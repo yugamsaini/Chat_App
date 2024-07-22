@@ -12,9 +12,9 @@ import '../models/message.dart';
 
 class MessageCard extends StatefulWidget {
 
-  final Message message;
+  
   const MessageCard({super.key, required this.message});
-
+final Message message;
   @override
   State<MessageCard> createState() => _MessageCardState();
 }
@@ -40,7 +40,7 @@ class _MessageCardState extends State<MessageCard> {
     //update last read message if sender and receiver are different
     if(widget.message.read.isEmpty){
       APIs.updateMessageReadStatus(widget.message);
-      log('message read updated');
+      // log('message read updated');
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,7 +246,9 @@ class _MessageCardState extends State<MessageCard> {
                })
              :
              //save item
-               _OptionItem(icon: const Icon(Icons.download_rounded,color: Colors.blue,size:26), name: 'Save Image: ', onTap: (){}),
+               _OptionItem(icon: const Icon(Icons.download_rounded,
+               color: Colors.blue,size:26),
+                name: 'Save Image: ', onTap: (){}),
 
              //separator between the option item
              if(isMe)
@@ -311,10 +313,12 @@ class _MessageCardState extends State<MessageCard> {
     String updatedMsg = widget.message.msg;
 
     showDialog(context: context, builder: (_)=>AlertDialog(
-      contentPadding: EdgeInsets.only(left: 24,right: 24,top: 20,bottom: 10),
+      contentPadding: EdgeInsets.only(
+        left: 24,right: 24,top: 20,bottom: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       //title
-      title:Row(children: const [Icon(Icons.message,color:Colors.blue,size:28),
+      title:Row(children: const [Icon(Icons.message,
+      color:Colors.blue,size:28),
       Text(' Update Message')
       ],
       ),
@@ -322,7 +326,8 @@ class _MessageCardState extends State<MessageCard> {
       content: TextFormField(initialValue: updatedMsg,
       maxLines: null,
       onChanged: (value) => updatedMsg=value,
-      decoration: InputDecoration(border : OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+      decoration: InputDecoration(border : OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15))),
       ),
 
       //actions
@@ -347,7 +352,7 @@ class _MessageCardState extends State<MessageCard> {
     ));
   }
 }
-
+//custom options card (for copy, edit, delete, etc.)
 class _OptionItem extends StatelessWidget {
   //for the bottom sheet diaog 
   //we will show the icon and the edit message button
@@ -370,7 +375,8 @@ class _OptionItem extends StatelessWidget {
           top: mq.height * .015,
           bottom : mq.height * .015,
          ),
-         child: Row(children: [icon, Flexible(
+         child: Row(children: [
+          icon, Flexible(
           child: Text('    $name',style : TextStyle(fontSize: 15,color : Colors.black54,letterSpacing: 0.5)))]),
        )
     );

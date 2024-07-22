@@ -164,8 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
               final list = data
                       ?.map((e) =>
-                          ChatUser.fromJson(e.data() as Map<String, dynamic>))
-                      .toList() ??
+                          ChatUser.fromJson(e.data())).toList() ??
                   [];
 
               
@@ -174,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   //back button
                   IconButton(
-                      onPressed: () {},
+                      onPressed: ()=>Navigator.pop(context),
                       icon:
                           const Icon(Icons.arrow_back, color: Colors.black54)),
 
@@ -227,7 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             }));
   }
-
+//bottom chat input field
   Widget _chatInput() {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -287,6 +286,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   IconButton(
                       onPressed: () async {
                         final ImagePicker picker = ImagePicker();
+
+                        //pick an image
                         final XFile? image = await picker.pickImage(
                             source: ImageSource.camera, imageQuality: 70);
                         if (image != null) {
@@ -305,14 +306,14 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-
+      
           //send message button
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
                 //if the message is first then add that user to the collection
                 if(_list.isEmpty){
-                  APIs.sendMessage(
+                  APIs.sendFirstMessage(
                     widget.user, _textController.text, Type.text);
                 } else {
                   //simply send message

@@ -6,7 +6,9 @@ class Dialogs{
     behavior: SnackBarBehavior.floating));
   }
 
+//method to show the progress bar
   static void showProgressBar(BuildContext context){
-    showDialog(context: context, builder: (_)=>const Center(child: CircularProgressIndicator()));
+    showDialog(context: context, builder: (_)=>const Center(child: CircularProgressIndicator(strokeWidth: 1,
+    )));
   }
 }
