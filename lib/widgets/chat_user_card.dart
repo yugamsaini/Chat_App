@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/helper/my_date_util.dart';
-import 'package:chatapp/main.dart';
-import 'package:chatapp/models/chat_user.dart';
-import 'package:chatapp/models/message.dart';
-import 'package:chatapp/widgets/dialogs/profile_dialog.dart';
+import '../helper/my_date_util.dart';
+import '../main.dart';
+import '../models/chat_user.dart';
+import '../models/message.dart';
+import 'dialogs/profile_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +48,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         snapshot.data?.docs; 
             
                      final list = 
-                     data?.map((e) => Message.fromJson(e.data() as Map<String, dynamic>)).toList() ?? [];
+                     data?.map((e) => Message.fromJson(e.data())).toList() ?? [];
                    
                    if(list.isNotEmpty) _message = list[0];
           return ListTile(
