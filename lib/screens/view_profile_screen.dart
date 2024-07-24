@@ -1,7 +1,7 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/helper/my_date_util.dart';
-import 'package:chatapp/main.dart';
+import '../helper/my_date_util.dart';
+import '../main.dart';
 //import 'package:chatapp/widgets/chat_user_card.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

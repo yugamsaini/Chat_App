@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/helper/my_date_util.dart';
-import 'package:chatapp/models/message.dart';
+import '../helper/my_date_util.dart';
+import '../models/message.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -154,26 +154,24 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _appBar() {
     return InkWell(
         onTap: () {
-
-          Navigator.push(context,MaterialPageRoute(builder: (_)=> ViewProfileScreen(user : widget.user)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => ViewProfileScreen(user: widget.user)));
         },
         child: StreamBuilder(
             stream: APIs.getUserInfo(widget.user),
             builder: (context, snapshot) {
               final data = snapshot.data?.docs;
 
-              final list = data
-                      ?.map((e) =>
-                          ChatUser.fromJson(e.data())).toList() ??
-                  [];
-
-              
+              final list =
+                  data?.map((e) => ChatUser.fromJson(e.data())).toList() ?? [];
 
               return Row(
                 children: [
                   //back button
                   IconButton(
-                      onPressed: ()=>Navigator.pop(context),
+                      onPressed: () => Navigator.pop(context),
                       icon:
                           const Icon(Icons.arrow_back, color: Colors.black54)),
 
@@ -184,7 +182,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       width: mq.height * .05,
                       height: mq.height * .05,
 
-                      imageUrl: list.isNotEmpty ? list[0].image : widget.user.image,
+                      imageUrl:
+                          list.isNotEmpty ? list[0].image : widget.user.image,
                       // placeholder: (context, url) => CircularProgressIndicator(),
                       errorWidget: (context, url, error) => const CircleAvatar(
                           child: Icon(CupertinoIcons.person)),
@@ -207,15 +206,22 @@ class _ChatScreenState extends State<ChatScreen> {
                       //for adding some space
                       const SizedBox(height: 2),
 
-                        //last seen time of user
-                       Text(list.isNotEmpty ?
-                       //if the user is online then show online 
-                       list[0].isOnline ? 'Online' : 
-                       
-                       //
-                        MyDateUtil.getLastActiveTime(context: context, lastActive: list[0].lastActive)
-                        
-                        : MyDateUtil.getLastActiveTime(context: context, lastActive: widget.user.lastActive),
+                      //last seen time of user
+                      Text(
+                          list.isNotEmpty
+                              ?
+                              //if the user is online then show online
+                              list[0].isOnline
+                                  ? 'Online'
+                                  :
+
+                                  //
+                                  MyDateUtil.getLastActiveTime(
+                                      context: context,
+                                      lastActive: list[0].lastActive)
+                              : MyDateUtil.getLastActiveTime(
+                                  context: context,
+                                  lastActive: widget.user.lastActive),
                           style: const TextStyle(
                               fontSize: 13, color: Colors.black54
                               //fontWeight: FontWeight.w500
@@ -226,6 +232,7 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             }));
   }
+
 //bottom chat input field
   Widget _chatInput() {
     return Padding(
@@ -275,7 +282,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         //uploading and sending image one by one
                         for (var i in images!) {
                           setState(() => _isUploading = true);
-                          await APIs.sentChatImage(widget.user, File(i.path));
+                          await APIs.sendChatImage(widget.user, File(i.path));
                           setState(() => _isUploading = false);
                         }
                       },
@@ -292,7 +299,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             source: ImageSource.camera, imageQuality: 70);
                         if (image != null) {
                           setState(() => _isUploading = true);
-                          await APIs.sentChatImage(
+                          await APIs.sendChatImage(
                               widget.user, File(image.path));
                           setState(() => _isUploading = false);
                         }
@@ -306,18 +313,19 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-      
+
           //send message button
           MaterialButton(
             onPressed: () {
               if (_textController.text.isNotEmpty) {
                 //if the message is first then add that user to the collection
-                if(_list.isEmpty){
+                if (_list.isEmpty) {
                   APIs.sendFirstMessage(
-                    widget.user, _textController.text, Type.text);
+                      widget.user, _textController.text, Type.text);
                 } else {
                   //simply send message
-                APIs.sendMessage(widget.user, _textController.text, Type.text);
+                  APIs.sendMessage(
+                      widget.user, _textController.text, Type.text);
                 }
                 _textController.text = '';
               }
