@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:chatapp/api/apis.dart';
-import 'package:chatapp/main.dart';
-import 'package:chatapp/screens/auth/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../api/apis.dart';
+import '../main.dart';
+import 'auth/login_screen.dart';
 //import 'package:chatapp/widgets/chat_user_card.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
