@@ -117,8 +117,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 return StreamBuilder(
                   stream: APIs.getAllUsers(snapshot.data?.docs.map((e) => e.id).toList() ?? []),
                   builder: (context, snapshot) {
+                    //if data is loading
                     if (snapshot.connectionState == ConnectionState.waiting ||
                         snapshot.connectionState == ConnectionState.none) {
+                          //then show progress indicator
                       return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return const Center(child: Text('Error occurred.'));

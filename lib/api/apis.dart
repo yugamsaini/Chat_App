@@ -125,7 +125,7 @@ log('\nsendPushNotificationE: $e');
       }
     }
 
-     //forgetting current user info
+     //for getting current user info
     static Future<void> getSelfInfo() async {
       await firestore.collection('users').doc(user.uid).get().then((user) async{
         if(user.exists){
